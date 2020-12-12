@@ -1,2 +1,3 @@
 # Operation Njord
- Application to Show Paytm Donations On Streamlabs
+ Application to Show UPI Donations On Streamlabs
+Currently Supports Only PhonePe 

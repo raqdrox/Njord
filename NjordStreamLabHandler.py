@@ -4,7 +4,7 @@ import json
 def getTokens():
     authCodes=None
 
-    with open('./auth.json','r') as f:
+    with open('./tokens/SLauth.json','r') as f:
         authCodes=json.load(f)
 
     data = {
@@ -23,13 +23,17 @@ def getTokens():
         authCodes['refresh_token']=response['refresh_token']
     else:
         print(response['error'])
+        return 0
 
 
-    with open('./auth.json','w') as f:
+
+    with open('./tokens/SLauth.json','w') as f:
         json.dump(authCodes,f,indent=4)
-        
+
+    return authCodes['access_token']
+
 def refreshTokens():
-    with open('./tokens/auth.json','r') as f:
+    with open('./tokens/SLauth.json','r') as f:
         authCodes=json.load(f)
 
     data = {
@@ -47,14 +51,17 @@ def refreshTokens():
         authCodes['refresh_token']=response['refresh_token']
     else:
         print(response['error'])
+        
 
 
-    with open('./tokens/auth.json','w') as f:
+    with open('./tokens/SLauth.json','w') as f:
         json.dump(authCodes,f,indent=4)
 
     return authCodes['access_token']
 
 def postDonations(donation,token):
+    if len(donation['name'])>24:
+        donation['name']=donation['name'][:23]
     data = {
     "name":donation['name'],
     "message":donation['message'],

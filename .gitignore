@@ -125,7 +125,12 @@ dmypy.json
 .pyre/
 
 #cred
-tokens/
+tokens/auth.json
+tokens/token.pickle
 
 #vscode
 .vscode/
+
+#extras
+GUI
+NjordBaseGUI.py

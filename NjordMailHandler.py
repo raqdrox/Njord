@@ -10,6 +10,19 @@ import re
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/gmail.modify']
 
+def getToken(creds):
+    if creds and creds.expired and creds.refresh_token:
+        creds.refresh(Request())
+    else:
+        try:
+            flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+        except:
+            return 0
+        creds = flow.run_local_server(port=0)
+    # Save the credentials for the next run
+    with open('token.pickle', 'wb') as token:
+        pickle.dump(creds, token)
+    return 1
 
 def search_message(service, user_id, search_string):
 
@@ -51,8 +64,13 @@ def extractor(snip):
     re2=re.compile(r'(?<=Message\s:\s)(.+)')
     match=re.search(re1,snip).group(0).split(' ₹ ')
     data={'name':match[0],'amount':match[1]}
-    match=re.search(re2,snip).group(0)
-    data['message']=match
+
+    match=re.search(re2,snip)
+    if match:
+        match=match.group(0)
+        data['message']=match
+    else:
+        data['message']=''
     return data
 
 def readAll(srv):
